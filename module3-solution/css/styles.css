@@ -88,14 +88,13 @@
     color: black;
     text-align: center;
     width: 100%;
+    background-color: purple;
+    border: black solid 1px;
+
     
     
 }
 
-.navbar-collapse.in{
-    
-    overflow-y: none;
-}
 #collapsable-nav{
     clear: both;
     margin-top: 30px;
