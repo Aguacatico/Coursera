@@ -1,0 +1,122 @@
+#header-nav{
+    background-color: grey;
+    border: 3px solid black;
+    border-radius: 0;
+    border-left: 0em;
+    border-right: 0em;
+    position: left; 
+    
+}
+
+#header-nav :hover{
+    text-decoration-line: none;
+}
+
+#header-nav h1{
+    color: black;
+    text-decoration: none;
+    padding-left: 20px;
+    margin-bottom: 15px;
+    size: 5vw;
+    margin-right: 0px;
+    float: left;
+    
+
+}
+
+
+.navbar-collapse{
+    float: right;
+    position: relative;
+}
+
+
+
+.nav-list{
+    color: black;
+}
+.nav-list a{
+    color: black;
+}
+
+#colapsable-nav{
+    
+    text-align: center;
+}
+.navbar-header{
+    text-align: center;
+}
+.row{
+    margin-right: auto;
+    margin-left: auto;
+}
+
+    
+    
+.our-menu{
+    color: black;
+    font: bold 30px;
+    margin-bottom: 30px;
+
+}
+.chicken{
+    background-color: grey;
+    text-align: justify;
+    color: black;
+    margin-top: 20px;
+   
+    
+    
+}
+
+#chicken-title{
+    font-size: 25px;
+    text-align: center;
+    font: bold;
+}
+
+
+
+#menu-tile, #specials-tile {
+    width: 280px;
+    margin: 0 auto 15px;
+    color: black;
+  }
+
+#collapsable-nav li a{
+    color: black;
+    text-align: center;
+    width: 100%;
+    background-color: purple;
+    border: black solid 1px;
+
+    
+    
+}
+
+#collapsable-nav{
+    clear: both;
+    margin-top: 30px;
+    width: 100%;
+    
+
+
+}
+
+.navbar-brand {
+    color: #777;
+    float: right;
+    position: relative;
+    margin-top: -75px;
+}
+
+@media (min-width: 767px) {
+    #collapsable-nav{
+        width: 0%;
+        height: 0px;
+    }
+    .navbar-header{
+        width: 0%;
+        height: 0px;
+    }
+}
