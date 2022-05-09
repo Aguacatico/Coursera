@@ -7,23 +7,13 @@ $(function () { // Same as document.addEventListener("DOMContentLoaded"...
       $("#collapsable-nav").collapse('hide');
     }
   });
-
-  // In Firefox and Safari, the click event doesn't retain the focus
-  // on the clicked button. Therefore, the blur event will not fire on
-  // user clicking somewhere else in the page and the blur event handler
-  // which is set up above will not be called.
-  // Refer to issue #28 in the repo.
-  // Solution: force focus on the element that the click event fired on
-  $("#navbarToggle").click(function (event) {
-    $(event.target).focus();
-  });
 });
 
 (function (global) {
 
 var dc = {};
 
-var homeHtml = "snippets/home-snippet.html";
+var homeHtmlUrl = "snippets/home-snippet.html";
 var allCategoriesUrl =
   "https://davids-restaurant.herokuapp.com/categories.json";
 var categoriesTitleHtml = "snippets/categories-title-snippet.html";
@@ -53,7 +43,7 @@ var insertProperty = function (string, propName, propValue) {
   string = string
     .replace(new RegExp(propToReplace, "g"), propValue);
   return string;
-}
+};
 
 // Remove the class 'active' from home and switch to Menu button
 var switchMenuToActive = function () {
@@ -90,17 +80,12 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
 // *** start ***
 // On first load, show home view
-// On first load, show home view
 showLoading("#main-content");
 $ajaxUtils.sendGetRequest(
-  homeHtml,
-  function (responseText) {
-    document.querySelector("#main-content")
-      .innerHTML = responseText;
-  },
-  false);
+  allCategoriesUrl,
+  buildAndShowHomeHTML, // ***** <---- TODO: STEP 1: Substitute [...] ******
+  true); // Explicitely setting the flag to get JSON from server processed into an object literal
 });
-
 // *** finish **
 
 
@@ -117,6 +102,7 @@ function buildAndShowHomeHTML (categories) {
       // Pay attention to what type of data that function returns vs what the chosenCategoryShortName
       // variable's name implies it expects.
       // var chosenCategoryShortName = ....
+      var chosenCategoryShortName = chooseRandomCategory(categories).short_name;
 
 
       // TODO: STEP 3: Substitute {{randomCategoryShortName}} in the home html snippet with the
@@ -131,12 +117,15 @@ function buildAndShowHomeHTML (categories) {
       // it into the home html snippet.
       //
       // var homeHtmlToInsertIntoMainPage = ....
+      chosenCategoryShortName = "'" + chosenCategoryShortName + "'";
+      var homeHtmlToInsertIntoMainPage = insertProperty(homeHtml, "randomCategoryShortName", chosenCategoryShortName);
 
 
-      // TODO: STEP 4: Insert the produced HTML in STEP 3 into the main page
+      // TODO: STEP 4: Insert the the produced HTML in STEP 3 into the main page
       // Use the existing insertHtml function for that purpose. Look through this code for an example
       // of how to do that.
       // ....
+      insertHtml('#main-content', homeHtmlToInsertIntoMainPage);
 
     },
     false); // False here because we are getting just regular HTML from the server, so no need to process JSON.
@@ -151,6 +140,8 @@ function chooseRandomCategory (categories) {
   // return category object with that randomArrayIndex
   return categories[randomArrayIndex];
 }
+
+
 // Load the menu categories view
 dc.loadMenuCategories = function () {
   showLoading("#main-content");
@@ -181,6 +172,9 @@ function buildAndShowCategoriesHTML (categories) {
       $ajaxUtils.sendGetRequest(
         categoryHtml,
         function (categoryHtml) {
+          // Switch CSS class active to menu button
+          switchMenuToActive();
+
           var categoriesViewHtml =
             buildCategoriesViewHtml(categories,
                                     categoriesTitleHtml,
@@ -193,7 +187,7 @@ function buildAndShowCategoriesHTML (categories) {
 }
 
 
-// Using categories data and snippets html
+
 // build categories view HTML to be inserted into page
 function buildCategoriesViewHtml(categories,
                                  categoriesTitleHtml,
@@ -234,6 +228,9 @@ function buildAndShowMenuItemsHTML (categoryMenuItems) {
       $ajaxUtils.sendGetRequest(
         menuItemHtml,
         function (menuItemHtml) {
+          // Switch CSS class active to menu button
+          switchMenuToActive();
+
           var menuItemsViewHtml =
             buildMenuItemsViewHtml(categoryMenuItems,
                                    menuItemsTitleHtml,
@@ -302,7 +299,7 @@ function buildMenuItemsViewHtml(categoryMenuItems,
                      menuItems[i].description);
 
     // Add clearfix after every second menu item
-    if (i % 2 != 0) {
+    if (i % 2 !== 0) {
       html +=
         "<div class='clearfix visible-lg-block visible-md-block'></div>";
     }
@@ -321,7 +318,7 @@ function insertItemPrice(html,
                          priceValue) {
   // If not specified, replace with empty string
   if (!priceValue) {
-    return insertProperty(html, pricePropName, "");;
+    return insertProperty(html, pricePropName, "");
   }
 
   priceValue = "$" + priceValue.toFixed(2);
